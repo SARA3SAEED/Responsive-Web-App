@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Web App</title>
+   <style>
+    /* styles.css */
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    }
+
+    #container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container {
+    text-align: center;
+    }
+
+    input {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    width: 80%;
+    box-sizing: border-box;
+    }
+
+    button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    }
+
+    button:hover {
+    background-color: #0056b3;
+    }
+
+    nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    }
+
+   </style>
+</head>
+<body>
+
+
+
+
+
+
+    <div id="container">
+        <!-- Registration Form -->
+        <div id="register" class="form-container">
+            <h2>تسجيل جديد</h2>
+            <form id="registerForm">
+                <input type="text" id="registerName" placeholder="الاسم">
+                <input type="email" id="registerEmail" placeholder="البريد الالكتروني">
+                <input type="password" id="registerPassword" placeholder="كلمة السر">
+                <button type="button" onclick="register()">تسجيل</button>
+            </form>
+        </div>
+        <!-- Login Form -->
+        <div id="login" class="form-container" style="display:none;">
+            <h2>تسجيل الدخول</h2>
+            <form id="loginForm">
+                <input type="email" id="loginEmail" placeholder="البريد الالكتروني">
+                <input type="password" id="loginPassword" placeholder="كلمة السر">
+                <button type="button" onclick="login()">دخول</button>
+            </form>
+        </div>
+        <!-- Profile Page -->
+        <div id="profile" class="form-container" style="display:none;">
+            <nav>
+                <span id="username"></span>
+                <button onclick="logout()">تسجيل خروج</button>
+            </nav>
+            <h2>مرحبا بك في صفحتك الشخصية</h2>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <script >
+        // script.js
+    function register() {
+    const name = document.getElementById('registerName').value;
+    const email = document.getElementById('registerEmail').value;
+    const password = document.getElementById('registerPassword').value;
+
+    if (name.length <= 5) {
+        alert('الاسم يجب أن يكون أكثر من 5 أحرف');
+        return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        alert('البريد الالكتروني غير صالح');
+        return;
+    }
+
+    if (password.length <= 8) {
+        alert('كلمة السر يجب أن تكون أكثر من 8 أحرف');
+        return;
+    }
+
+    // Save user data to localStorage
+    localStorage.setItem('users', JSON.stringify({ name, email, password }));
+
+    // Redirect to profile page
+    document.getElementById('username').innerText = name;
+    document.getElementById('register').style.display = 'none';
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('profile').style.display = 'block';
+    }
+
+    function login() {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+
+    const user = JSON.parse(localStorage.getItem('users'));
+
+    if (user && user.email === email && user.password === password) {
+        document.getElementById('username').innerText = user.name;
+        document.getElementById('register').style.display = 'none';
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('profile').style.display = 'block';
+    } else {
+        alert('البريد الالكتروني أو كلمة السر غير صحيحة');
+    }
+    }
+
+    function logout() {
+    document.getElementById('profile').style.display = 'none';
+    document.getElementById('login').style.display = 'block';
+    }
+
+    // Prevent access to profile page without login
+    document.addEventListener('DOMContentLoaded', () => {
+    const user = JSON.parse(localStorage.getItem('users'));
+    if (user) {
+        document.getElementById('register').style.display = 'none';
+        document.getElementById('login').style.display = 'block';
+    } else {
+        document.getElementById('register').style.display = 'block';
+    }
+    });
+
+    </script>
+</body>
+</html>
